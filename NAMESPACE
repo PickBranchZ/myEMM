@@ -1,1 +1,3 @@
 exportPattern("^[[:alpha:]]+")
+
+importFrom("stats", "as.formula", "lm", "model.matrix", "predict", "qt", "vcov")
