@@ -9,12 +9,10 @@
 #' @param specs a vector or variable to calculate EMM with
 #'
 #' @return a list of EMMs for each specs
+#' @import stats
 #' @export
 #' @examples myEMM(model1, 'Gender')
-
-
-
-
+#'
 myEMM <- function(object, specs){
   ## obtain basic information from input model
   data <- object$model[1:length(object$model)]

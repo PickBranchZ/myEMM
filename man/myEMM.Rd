@@ -24,4 +24,5 @@ you can use this function to calculate estimated marginal mean and its confidenc
 }
 \examples{
 myEMM(model1, 'Gender')
+
 }

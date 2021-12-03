@@ -1,6 +1,9 @@
-#' @noRd
 
-## name function to remove factor() and I()
+#' @title nameHelper
+#' @description name function to remove factor() and I()
+#' @param names names is the original vector of names
+#' @return a vector of EMMs for each specs
+#'
 nameHelper <- function(names){
   for(i in 1:length(names)){
     if(grepl("factor\\(|I\\(",names[i])==TRUE){
@@ -11,8 +14,12 @@ nameHelper <- function(names){
   return(names)
 }
 
-
-## function to check specs to calculate included or not
+#' @title specs_ck
+#' @description function to check specs to calculate included or not
+#' @param specs specs is a vector of expected specs
+#' @param mynames mynames is a vector of names
+#' @return a boll vector of expected specs in mynames or warning when there is specs not in mynames
+#'
 specs_ck <- function(specs, mynames)
 {
   ck <- specs %in% mynames
@@ -24,7 +31,12 @@ specs_ck <- function(specs, mynames)
 }
 
 
-## function to build reference grid
+#' @title myRefGrid
+#' @description function to build reference grid of each variable
+#' @param data data is a data.frame of model data
+#' @param classes classes is a vector of classses of variables in the data
+#' @return a list of reference grid of each variable
+#'
 myRefGrid <- function(data, classes){
   tmp <- list(NULL)
   length(tmp)<-ncol(data)
@@ -38,8 +50,12 @@ myRefGrid <- function(data, classes){
   return(tmp)
 }
 
-
-## function to generate new X according to each grid
+#' @title xGen
+#' @description function to generate new X according to each grid
+#' @param ref_grid ref_grid is a list of reference grid of each variable
+#' @param classes classes is a vector of classses of variables in the data
+#' @return a data.frame of newly generated data
+#'
 xGen <- function(ref_grid, classes){
   n=1
   len=c()
@@ -65,8 +81,13 @@ xGen <- function(ref_grid, classes){
   return(newdata)
 }
 
-
-## function to calculate emm, se and confidence intervals
+#' @title emmHelper
+#' @description function to calculate emm, se and confidence intervals
+#' @param data data is a data.frame of model data
+#' @param newdata newdata is a data.frame of newly generated data
+#' @param ck ck is a boll vector of expected specs in mynames
+#' @return a list of emmeams, se and confidence interval of each expected spec
+#'
 emmHelper <- function(data, newdata, ck){
   names <- names(data)
   myFormula <- as.formula(paste0(names[1], '~', paste(names[2:length(names)], collapse = ' + ')))
