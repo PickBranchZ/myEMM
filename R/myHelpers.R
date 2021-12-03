@@ -1,4 +1,3 @@
-
 #' @title nameHelper
 #' @description name function to remove factor() and I()
 #' @param names names is the original vector of names
