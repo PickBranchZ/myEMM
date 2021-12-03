@@ -1,7 +1,7 @@
 #' This is some description of this function.
 #' @title my estimated marginal mean calculator
 #'
-#' @description today,I create my first function,a very usrful function.
+#' @description the function is written for biostat625 HW4
 #'
 #' @details you can use this function to calculate estimated marginal mean and its confidence interval.
 #'
