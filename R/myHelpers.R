@@ -23,7 +23,8 @@ specs_ck <- function(specs, mynames)
 {
   ck <- specs %in% mynames
   if (sum(1-ck)!=0){
-    stop(paste0('Variables ', specs[ck==FALSE], ' do not exit in the model.'))
+    warning(paste0('Variables ', specs[ck==FALSE], ' do not exit in the model.'))
+    ck <- ck[which(ck==TRUE)]
   }
   ck <- mynames %in% specs
   return(ck)
