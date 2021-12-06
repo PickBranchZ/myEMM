@@ -7,20 +7,18 @@
 myEMM(object, specs)
 }
 \arguments{
-\item{object}{object is a lm model}
+\item{object}{object is a linear regression model}
 
-\item{specs}{a vector or variable to calculate EMM with}
+\item{specs}{a variable or a vector of variables to calculate EMM with}
 }
 \value{
-a list of EMMs for each specs
+a list of EMMs for each spec
 }
 \description{
-the function is written for biostat625 HW4
+Obtain estimated marginal mean and its confidence interval based on given linear models.
 }
 \details{
 This is some description of this function.
-
-you can use this function to calculate estimated marginal mean and its confidence interval.
 }
 \examples{
 myEMM(lm(mpg ~ disp + wt + factor(cyl), data = mtcars), c('wt', 'cyl'))
