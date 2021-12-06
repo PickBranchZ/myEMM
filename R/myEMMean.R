@@ -1,15 +1,15 @@
 #' This is some description of this function.
 #' @title my estimated marginal mean calculator
 #'
-#' @description the function is written for biostat625 HW4
+#' @description Obtain estimated marginal mean and its confidence interval based on given linear models.
 #'
-#' @details you can use this function to calculate estimated marginal mean and its confidence interval.
+#' @param object object is a linear regression model
+#' @param specs a variable or a vector of variables to calculate EMM with
 #'
-#' @param object object is a lm model
-#' @param specs a vector or variable to calculate EMM with
-#'
-#' @return a list of EMMs for each specs
+#' @return a list of EMMs for each spec
 #' @import stats
+#' @examples
+#' myEMM(lm(mpg ~ disp + wt + factor(cyl), data = mtcars), c('wt', 'cyl'))
 #' @export
 #'
 myEMM <- function(object, specs){

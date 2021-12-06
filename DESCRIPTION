@@ -1,15 +1,18 @@
 Package: myEMM
 Type: Package
 Title: My estimated marginal mean calculator
-Version: 0.1.0
+Version: 1.0.0
 Author: Longfei Zhang
 Maintainer: Longfei Zhang <longfeiz@umich.edu>
-Description: My function to calculate estimated marginal mean calculator and 
+Description: My own function to calculate estimated marginal mean calculator and 
              its confidence interval based on given lm model.
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
