@@ -4,10 +4,12 @@
 \alias{xGen}
 \title{xGen}
 \usage{
-xGen(ref_grid, classes)
+xGen(ref_grid, data, classes)
 }
 \arguments{
 \item{ref_grid}{ref_grid is a list of reference grid of each variable}
+
+\item{data}{data is a data.frame of model data}
 
 \item{classes}{classes is a vector of classses of variables in the data}
 }

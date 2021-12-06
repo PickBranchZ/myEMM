@@ -11,7 +11,6 @@
 #' @return a list of EMMs for each specs
 #' @import stats
 #' @export
-#' @examples myEMM(model3, specs3)
 #'
 myEMM <- function(object, specs){
   ## obtain basic information from input model

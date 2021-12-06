@@ -53,6 +53,7 @@ myRefGrid <- function(data, classes){
 #' @title xGen
 #' @description function to generate new X according to each grid
 #' @param ref_grid ref_grid is a list of reference grid of each variable
+#' @param data data is a data.frame of model data
 #' @param classes classes is a vector of classses of variables in the data
 #' @return a data.frame of newly generated data
 #'
