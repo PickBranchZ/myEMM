@@ -13,6 +13,8 @@ nameHelper <- function(names){
   return(names)
 }
 
+
+
 #' @title specs_ck
 #' @description function to check specs to calculate included or not
 #' @param specs specs is a vector of expected specs
@@ -23,12 +25,13 @@ specs_ck <- function(specs, mynames)
 {
   ck <- specs %in% mynames
   if (sum(1-ck)!=0){
-    warning(paste0('Variables ', specs[ck==FALSE], ' do not exit in the model.'))
+    stop(paste0('Variables ', specs[ck==FALSE], ' do not exit in the model.'))
     ck <- ck[which(ck==TRUE)]
   }
   ck <- mynames %in% specs
   return(ck)
 }
+
 
 
 #' @title myRefGrid
@@ -49,6 +52,8 @@ myRefGrid <- function(data, classes){
   }
   return(tmp)
 }
+
+
 
 #' @title xGen
 #' @description function to generate new X according to each grid
@@ -83,6 +88,8 @@ xGen <- function(ref_grid, data, classes){
   }
   return(newdata)
 }
+
+
 
 #' @title emmHelper
 #' @description function to calculate emm, se and confidence intervals

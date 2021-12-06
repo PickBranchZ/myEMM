@@ -12,5 +12,5 @@ test_that('specs_ck check whether given specs exits in mynames',{
   # res3 <- c(FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
   expect_equal(specs_ck(test_specs1, test_mynames1), res1)
   expect_equal(specs_ck(test_specs2, test_mynames2), res2)
-  expect_warning(specs_ck(test_specs3, test_mynames3))
+  expect_error(specs_ck(test_specs3, test_mynames3))
 })

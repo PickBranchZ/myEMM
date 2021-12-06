@@ -12,6 +12,7 @@ LazyData: true
 RoxygenNote: 7.1.2
 Suggests: 
     emmeans,
+    benchr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

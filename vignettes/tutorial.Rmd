@@ -15,15 +15,64 @@ knitr::opts_chunk$set(
 ```
 
 
-
 ```{r setup}
 library(myEMM)
 library(emmeans)
+library(benchr)
+```
+
+## Introduction
+  Estimated marginal means are based on a model – not directly on data. The basis for them is the reference grid for a given model. To obtain the reference grid, consider all the predictors in the model. For each predictor that is a factor, use its levels and for each numeric predictor, use its average. The reference grid is then a regular grid of all combinations of these reference levels. Although package 'emmeans' is enormously useful to do post hoc comparisons among groups after fitting a model, it will try to get access to original data which means there may be something wrong when the original data is changed or deleted. So, I write my own EMM calculator, 'myEMM', to calculate EMMs as well as its standard errors and confidence intervals based on the given model only. The function will generate data similar to the original one simplely from the given model to avoid the issue for 'emmeans'.
+
+
+## Example
+  Consider the mtcars dataset, fits a linear regression model on mpg with disp, wt and cyl, where cyl is a factor covariate. Then simply input the fitted model m1 and the specs to calculate EMM with, c('wt', 'cyl'). myEMM will return the EMMs as well as its ses and confidence intervals. The function works for every linear regression model as long as the specs are included in the model. If not, the process will be stopped and a piece of warning will be given.
+```{r example}
+data(mtcars)
+m1 = lm(mpg ~ disp + wt + factor(cyl), data = mtcars)
+myEMM(m1, c('wt', 'cyl'))
 ```
 
 
+## Correctness Test
+  Because emmeans return a S4 object where the EMMs are hard to extract, so the comparison is presented directly by the results of my function and the original 'emmeans' function. The data 'pigs' is provided by package 'emmeans' and is also used as example for the package. The EMMs, standard errors and confidence intervals are all identical between the results from two functions. 
+```{r correctness test}
+data(pigs)
+m2 <- lm(conc~factor(source)+factor(percent), pigs)
+
+myEMM(m2, c('source', 'percent'))
+
+emmeans(m2, 'source')
+emmeans(m2, 'percent')
+```
 
 
+## Speed Test
+  As mentioned earlier, 'emmeans' returns a S4 object of its own form, so there are much more information included in the object than shown and it is reasonable that the original function works much slower. But the speed test still shows that my rewrite function works really fast.
+
+```{r speed test}
+mybench <- benchmark(
+  myEMM(m2, 'source'), 
+  emmeans(m2, 'source')
+)
+mybench
+```
+
+
+## Advantage over the Original Function
+  Because 'emmeans' may request original data when it works, the results will subject to the change of original data. While my function calculates the EMMs only depending on the given model. As the example below shows, when the original data is changed, 'emmeans' gives different results before and after the change, while my function doesn't.
+
+``` {r Advantage over the Original Function}
+mydata <- mtcars
+m3 = lm(mpg ~ disp + wt + factor(cyl), data = mydata)
+
+myEMM(m3, 'cyl')
+emmeans(m3, 'cyl')
+
+mydata <- head(mydata, 20)
+myEMM(m3, 'cyl')
+emmeans(m3, 'cyl')
+```
 
 
 
