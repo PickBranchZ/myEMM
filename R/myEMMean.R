@@ -11,7 +11,7 @@
 #' @return a list of EMMs for each specs
 #' @import stats
 #' @export
-#' @examples myEMM(model1, 'Gender')
+#' @examples myEMM(model3, specs3)
 #'
 myEMM <- function(object, specs){
   ## obtain basic information from input model
@@ -20,18 +20,19 @@ myEMM <- function(object, specs){
 
   ## remove factor() and I() in names
   mynames <- nameHelper(names(data))
-  ## check specs to calculate included or not
+  ## check specs to calculate included or not. If not, warning
   ck <- specs_ck(specs, mynames[-1])
+  ## remove every symbols in the names
   mynames <- gsub("[[:punct:]|[:blank:]]", "", mynames)
   names(classes) <- mynames
   names(data) <- mynames
 
   ## build reference grid and generate new X according to each grid
   ref_grid <- myRefGrid(data, classes)
-  newdata <- xGen(ref_grid, classes)
+  newdata <- xGen(ref_grid, data, classes)
   names(newdata) <- mynames
 
-  ## calculate emm and related values
+  ## calculate EMM and related values
   results <- emmHelper(data, newdata, ck)
   return(results)
 }

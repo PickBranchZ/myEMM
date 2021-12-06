@@ -56,7 +56,8 @@ myRefGrid <- function(data, classes){
 #' @param classes classes is a vector of classses of variables in the data
 #' @return a data.frame of newly generated data
 #'
-xGen <- function(ref_grid, classes){
+xGen <- function(ref_grid, data, classes){
+  ## calculate needed # of rows of newdata for every category
   n=1
   len=c()
   nx <- length(ref_grid)
@@ -65,8 +66,8 @@ xGen <- function(ref_grid, classes){
     n=n*length(ref_grid[[i]])
   }
 
+  ## generate newdata according to reference grid
   newdata <- as.data.frame(matrix(0, ncol = nx, nrow = n))
-
   newdata[ ,1] <- rep(ref_grid[[1]], n/len[1])
   if(nx>1){
     tmp=1
@@ -75,6 +76,7 @@ xGen <- function(ref_grid, classes){
       newdata[ ,i] <- rep(rep(ref_grid[[i]], each=tmp), n/(len[i]*tmp))
       if(classes[i]=='factor'){
         newdata[ ,i] <- as.factor(newdata[ ,i])
+        levels(newdata[ ,i]) <- levels(data[ ,i])
       }
     }
   }
@@ -90,11 +92,11 @@ xGen <- function(ref_grid, classes){
 #'
 emmHelper <- function(data, newdata, ck){
   names <- names(data)
+
+  ## fit a same model with my names and calculate emm for each detailed category
   myFormula <- as.formula(paste0(names[1], '~', paste(names[2:length(names)], collapse = ' + ')))
   m1 <- lm(myFormula, data)
   pred <- predict(m1, newdata, se.fit = TRUE)
-
-
   newdata$EMM <- pred$fit
   newdata$se <- pred$se.fit
   df <- pred$df
@@ -104,26 +106,39 @@ emmHelper <- function(data, newdata, ck){
   for(i in 1:length(res)){
     x = which(ck==TRUE)[i]+1
     names(res)[i] = names(data)[x]
-    emm <- as.vector(tapply(newdata$EMM, newdata[x], mean))
 
+    ##generate covariance matrix
     X <- model.matrix(myFormula, data=newdata)
     V <- vcov(m1)
     corr_mat <- X %*% V %*% t(X)
-    if(class(data[,x])!='factor'){
+
+    ##calculate emm and se
+    if(class(data[,x])!='factor'){              ## for not factor x
+      emm <- mean(newdata$EMM)
       se <- sqrt(sum(corr_mat)/nrow(corr_mat))
-    }else{
+    }else{                                      ## for factor x
+      emm <- c()
       se <- c()
-      for (j in levels(data[,x])){
-        x_index <- newdata[,x]==j
+      for (j in levels(newdata[, x])){
+        ##calculate emm
+        emm <- c(emm, mean(newdata$EMM[newdata[,x]==j]))
+
+        ##generate corresponding covariance matrix for each x and calculate se
+        x_index <- as.numeric(newdata[,x]==j)
         x_mat <- matrix(0, ncol = length(x_index), nrow = length(x_index))
         diag(x_mat) <- x_index
         corr_tmp <- x_mat %*% corr_mat %*% x_mat
         se <- c(se, sqrt(sum(corr_tmp))/sum(x_index))
       }
     }
+
+    ## calculate confidence intervals with emm and se
     lower.CL <- emm - qt(0.975, df)*se
     upper.CL <- emm + qt(0.975, df)*se
-    res[[i]] <- round(cbind(emm, se, lower.CL, upper.CL), 2)
+
+    ## combine all results
+    res[[i]] <- round(cbind(emm, se, df, lower.CL, upper.CL), 2)
+    row.names(res[[i]]) <- levels(newdata[, x])
   }
 
   return(res)

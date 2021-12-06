@@ -23,6 +23,6 @@ This is some description of this function.
 you can use this function to calculate estimated marginal mean and its confidence interval.
 }
 \examples{
-myEMM(model1, 'Gender')
+myEMM(model3, specs3)
 
 }
